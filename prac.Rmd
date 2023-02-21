@@ -1,0 +1,38 @@
+---
+title: "checkin' out data"
+output: html_document
+date: "2023-02-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(naniar)
+```
+
+```{r}
+#setwd("emlieu_breakfast_price")
+#setwd("/Users/eclieu/Desktop/emlieu_breakfast_price")
+
+#setwd("/Users/eclieu/Desktop/BIS15W2023_elieu/")
+setwd("/Users/eclieu/Desktop/emlieu_breakfast_price/")
+```
+```{r}
+getwd()
+```
+
+```{r}
+avo <- read_csv("avocado-updated-2020 2.csv")
+```
+
+```{r}
+avo
+```
+
