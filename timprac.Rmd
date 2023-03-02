@@ -1,0 +1,33 @@
+---
+title: "tim_practice"
+output: html_document
+date: "2023-03-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(tidyverse)
+```
+
+```{r}
+getwd()
+```
+
+
+```{r}
+avocado <- read_csv("avocado-updated-2020 2.csv")
+```
+```{r}
+avocado
+```
+```{r}
+avocado %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(desc(average_price))
+
+```
+
