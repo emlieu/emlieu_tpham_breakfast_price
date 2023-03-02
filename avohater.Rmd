@@ -35,4 +35,14 @@ avo <- read_csv("avocado-updated-2020 2.csv")
 ```{r}
 avo
 ```
+```{r}
+avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(desc(average_price))
+```
+```{r}
+avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(average_price)
+```
 
