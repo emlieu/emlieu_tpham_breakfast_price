@@ -17,23 +17,63 @@ library(here)
 library(naniar)
 ```
 
+
 ```{r}
 #setwd("emlieu_breakfast_price")
 #setwd("/Users/eclieu/Desktop/emlieu_breakfast_price")
 
 #setwd("/Users/eclieu/Desktop/BIS15W2023_elieu/")
-setwd("/Users/eclieu/Desktop/emlieu_breakfast_price/")
+#setwd("/Users/eclieu/Desktop/emlieu_breakfast_price/")
 ```
 ```{r}
-getwd()
+#getwd()
 ```
 
+
+## Looking at The Data
 ```{r}
 avo <- read_csv("avocado-updated-2020 2.csv")
 ```
 
 ```{r}
 avo
+```
+## Note from Data: 
+4046: refers to non orgo small/med hass avos
+4225: refers to non orgo large hass avos (8-10 oz)
+4770: refers to non orgo extra large avos (10-15 oz)
+
+## What are we trying to get from this data? Why do we care?
+# Main Premise: 
+tim and i want to continue eating avo toast for brekkie, but cost is going up. So where can we move to in order to live out our avo dreams until we are too broke?
+
+#Things to Consider/ Think About:
+organic or non organic(conventional)?
+finding the trend/ slope of how much avos are increasing every year in particular locations (where we live now, where the data says the cheapest avos are, where avos are the most expensive bc why not) (plot?)
+lets put it on a map why not (map?)
+assuming we keep our current wages, what year do we have to time travel to in order to max out our avo consumption (most cheap, calculate slope first)
+as opoosed to avos in general (above), let's get specific:
+what size do people in particular locations prefer?
+do people on average prefer organic or conventional? does this differ by location? (map?)
+
+
+#Generic guidelines
+1 app, couple plots
+5 mins presentation
+be happy
+
+## Data Analysis 
+```{r}
+org_avo <- avo %>% 
+  filter (type == "organic") %>% 
+  arrange(desc(average_price))
+org_avo
+```
+```{r}
+pleb_avo <- avo %>% 
+  filter(type == "conventional") %>% 
+  arrange(desc(average_price))
+pleb_avo
 ```
 ```{r}
 avo %>% 
@@ -44,5 +84,13 @@ avo %>%
 avo %>% 
   select("year", "geography", "average_price") %>% 
   arrange(average_price)
+```
+
+## Notice: 
+the cheapest avos are not necessarily in the oldest year, they are probably where people don't usually eat avos 
+
+```{r}
+avo %>% 
+  tabyl(geography)
 ```
 
