@@ -1,0 +1,64 @@
+---
+title: "tim_practice"
+output: html_document
+date: "2023-03-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(tidyverse)
+library(janitor)
+library(here)
+library(naniar)
+library(shiny)
+library(ggplot2)
+```
+
+```{r}
+getwd()
+```
+
+
+```{r}
+avocado <- read_csv("avocado-updated-2020 2.csv")
+```
+```{r}
+avocado
+```
+```{r}
+avocado %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(desc(average_price))
+
+```
+```{r}
+names(avocado)
+#4046 = non-organic small/medium Hass Avocados (3-5 oz)  
+#4225 = non-organic large Hass Avocados (8-10 oz)
+#4770 = non-organic extra large Hass Avocados (10-15 oz)
+```
+```{r}
+organic_avocado <- avocado %>% 
+                      filter(type == "organic")
+organic_avocado %>% 
+  arrange(desc(total_volume))
+```
+```{r}
+normie_avocado <- avocado %>% 
+                      filter(type == "conventional")
+normie_avocado %>% 
+  arrange(desc(total_volume))
+```
+```{r}
+avocado %>% 
+  tabyl(geography)
+```
+
+```{r}
+
+```
+
