@@ -15,6 +15,7 @@ library(tidyverse)
 library(janitor)
 library(here)
 library(naniar)
+library(ggplot2)
 ```
 
 
@@ -90,7 +91,273 @@ avo %>%
 the cheapest avos are not necessarily in the oldest year, they are probably where people don't usually eat avos 
 
 ```{r}
+pleb_avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(desc(average_price))
+```
+```{r}
+pleb_avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(average_price)
+```
+```{r}
+org_avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(desc(average_price))
+```
+```{r}
+org_avo %>% 
+  select("year", "geography", "average_price") %>% 
+  arrange(average_price)
+```
+
+#Note:
+for non orgo avos, the most expensive are in chicago for $2.22 and the cheapest are in phoenix/tucson for .46c. I also notice that these max and min prices are both in 2017, along with the cheapest avos overall. However the most expensive were in 2016. I also think it's interesting how the cheapest avos overall were actually organic and not conventional. 
+
+#Plan
+locations of interest:
+sf (most expensive overall/ for org)
+chicago (most expensive for pleb)
+Cincinnati/Dayton (cheapest overall/ for org)
+pheonix/tucson (cheapest for pleb)
+sacramento (where we are to compare)
+make 1 graph for each location with a density line for org and pleb
+
+```{r}
+avo$year <- as.factor(avo$year)
+avo
+```
+
+```{r}
 avo %>% 
-  tabyl(geography)
+  filter(geography == "San Francisco") %>% 
+  group_by(year) %>% 
+  mutate(average_price_mean = mean(average_price, na.rm=T)) %>% 
+  ggplot(aes(x= year, y= average_price_mean, fill=year))+
+  geom_point()+
+  geom_smooth(method=lm, se=T)
+```
+
+```{r}
+p <- avo %>% 
+  filter(geography == "San Francisco") %>% 
+  group_by(year) %>% 
+  mutate(average_price_mean = as.numeric(mean(average_price, na.rm=T))) %>% 
+  ggplot(aes(x= year, y= average_price_mean, fill=year))+
+  geom_point()+
+  geom_smooth(method=lm, se=F
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              )
+p
+```
+
+```{r}
+avo %>% 
+  filter(geography == "San Francisco") %>% 
+  ggplot(aes(x= year, y= average_price, fill=year))+
+  geom_boxplot()
+```
+
+```{r}
+avo %>% 
+  filter(geography == "Chicago") %>% 
+  ggplot(aes(x= year, y= average_price, fill=year))+
+  geom_boxplot()
+```
+```{r}
+avo %>% 
+  filter(geography == "Cincinnati/Dayton") %>% 
+  ggplot(aes(x= year, y= average_price, fill=year))+
+  geom_boxplot()
+```
+```{r}
+avo %>% 
+  filter(geography == "Phoenix/Tucson") %>% 
+  ggplot(aes(x= year, y= average_price, fill=year))+
+  geom_boxplot()
+```
+
+```{r}
+avo %>% 
+  filter(geography == "Sacramento") %>% 
+  ggplot(aes(x= year, y= average_price, fill=year))+
+  geom_boxplot()
 ```
 
