@@ -316,14 +316,8 @@ avo %>%
   geom_boxplot()
 ```
 
-##Lets do something new because I can't find the slope: Map
-```{r}
-#install.packages("devtools")
-library(devtools)
-```
+##Lets do something new because I can't find the slope: app
 
-```{r}
-install.packages("ggmaps")
-library(ggmaps)
-```
+
+
 
