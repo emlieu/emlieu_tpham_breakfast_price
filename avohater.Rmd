@@ -18,6 +18,21 @@ library(naniar)
 library(ggplot2)
 ```
 
+```{r}
+install.packages("stargazer")
+```
+```{r}
+library(stargazer)
+```
+```{r}
+#install.packages("sandwich")
+#install.packages("haven")
+```
+
+```{r}
+library(sandwich)
+library(haven)
+```
 
 ```{r}
 #setwd("emlieu_breakfast_price")
@@ -127,16 +142,135 @@ make 1 graph for each location with a density line for org and pleb
 avo$year <- as.factor(avo$year)
 avo
 ```
+```{r}
+sf_data <- avo %>% 
+  filter(geography == "San Francisco")
+sf_data
+```
+
+```{r}
+sf_data %>% 
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  geom_smooth(method= lm, se= F)
+```
+
+
+
+```{r}
+sf_data %>% 
+res=lm(average_price ~ date)
+```
+
+```{r}
+options(scipen = 9)
+cse = function(reg) {
+  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
+  return(rob)
+}
+sfreg <- lm(average_price ~ date, data=sf_data)
+stargazer(sfreg,
+          se=list(cse(sfreg)),
+          title="Regression Results", type="text",
+          df=FALSE, digits=3)
+```
+
+```{r}
+lm(average_price ~ date, data= sf_data)
+```
+
+
+
+
+```{r}
+sf_data$average_price <- as.character(sf_data$average_price)
+sf_data
+```
+
+```{r}
+sf_data$date <- as.factor(sf_data$date)
+sf_data
+```
+
+```{r}
+?lm
+```
+
+
+```{r}
+chic_data <- avo %>% 
+  filter(geography == "Chicago")
+```
+
+```{r}
+chic_data %>% 
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  geom_smooth(method= lm, se= F)
+```
+
+```{r}
+options(scipen = 9)
+cse = function(reg) {
+  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
+  return(rob)
+}
+chicreg <- lm(average_price ~ date, data=chic_data)
+stargazer(chicreg,
+          se=list(cse(chicreg)),
+          title="Regression Results", type="text",
+          df=FALSE, digits=3)
+```
+
+```{r}
+cinday_data <- avo %>% 
+  filter(geography == "Cincinnati/Dayton")
+```
+
+```{r}
+cinday_data %>%  
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  geom_smooth(method= lm, se= F)
+```
+```{r}
+options(scipen = 9)
+cse = function(reg) {
+  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
+  return(rob)
+}
+reg1 <- lm(average_price ~ date, data=cinday_data)
+stargazer(reg1,
+          se=list(cse(reg1)),
+          title="Regression Results", type="text",
+          df=FALSE, digits=3)
+```
+##literally how do you find the slope of line of best fit
+```{r}
+avo %>% 
+  filter(geography == "Cincinnati/Dayton") %>% 
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  geom_smooth(method= lm, se= F)
+```
 
 ```{r}
 avo %>% 
-  filter(geography == "San Francisco") %>% 
-  group_by(year) %>% 
-  mutate(average_price_mean = mean(average_price, na.rm=T)) %>% 
-  ggplot(aes(x= year, y= average_price_mean, fill=year))+
+  filter(geography == "Phoenix/Tucson") %>% 
+  ggplot(aes(x= date, y= average_price))+
   geom_point()+
-  geom_smooth(method=lm, se=T)
+  geom_smooth(method=lm, se=F)
 ```
+
+
+```{r}
+avo %>% 
+  filter(geography == "Sacramento") %>% 
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  geom_smooth(method=lm, se=F)
+```
+
 
 ```{r}
 p <- avo %>% 
@@ -181,4 +315,9 @@ avo %>%
   ggplot(aes(x= year, y= average_price, fill=year))+
   geom_boxplot()
 ```
+
+##Lets do something new because I can't find the slope: app
+
+
+
 
