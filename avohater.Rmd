@@ -147,6 +147,57 @@ sf_data <- avo %>%
   filter(geography == "San Francisco")
 sf_data
 ```
+```{r}
+sf_data <- sf_data %>%
+    mutate(time_dif = as.double(difftime(date, lubridate::ymd("2015-01-04")), units= "days"))
+sf_data
+```
+
+```{r}
+sf_data %>% 
+  ggplot(aes(x= date, y= average_price))+
+  geom_point()+
+  stat_smooth(method= lm, se= F)
+```
+
+
+
+```{r}
+fit <- lm(`date` ~ average_price, `data` = sf_data)
+ggplotRegression(fit)
+```
+
+```{r}
+options(scipen= 999)
+```
+
+```{r}
+ggplotRegression <- function(fit){
+ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "red") +
+  labs(title = paste("Intercept =",signif(fit$coef[[1]],5 ),
+                     " Slope =",signif(fit$coef[[2]], 5)))
+
+
+  }
+
+ggplotRegression(lm(average_price ~ time_dif, data = sf_data))
+
+```
+```{r}
+sf_data %>% 
+ggplot(aes(x= date, y= average_price))+
+geom_point()+
+geom_smooth(method= lm, se= F)+
+labs(title = paste("Intercept =1.7728",
+                     "Slope = -0.000011943"))
+
+
+```
+
+
+
 
 ```{r}
 sf_data %>% 
