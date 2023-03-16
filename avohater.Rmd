@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
+stuff for doing stuff
 ```{r}
 library(tidyverse)
 library(janitor)
@@ -18,20 +19,19 @@ library(naniar)
 library(ggplot2)
 ```
 
-```{r}
-install.packages("stargazer")
-```
-```{r}
-library(stargazer)
-```
-```{r}
-#install.packages("sandwich")
-#install.packages("haven")
-```
+yassifying
 
 ```{r}
-library(sandwich)
-library(haven)
+install.packages("RColorBrewer")
+install.packages("paletteer")
+install.packages("ggthemes")
+install.packages("extrafont")
+```
+```{r}
+library(RColorBrewer)
+library(paletteer)
+library(ggthemes)
+library(extrafont)
 ```
 
 ```{r}
@@ -74,7 +74,7 @@ do people on average prefer organic or conventional? does this differ by locatio
 
 
 #Generic guidelines
-1 app, couple plots
+1 app?, couple plots
 5 mins presentation
 be happy
 
@@ -93,12 +93,12 @@ pleb_avo
 ```
 ```{r}
 avo %>% 
-  select("year", "geography", "average_price") %>% 
+  select("year", "geography", "average_price", "type") %>% 
   arrange(desc(average_price))
 ```
 ```{r}
 avo %>% 
-  select("year", "geography", "average_price") %>% 
+  select("year", "geography", "average_price", "type") %>% 
   arrange(average_price)
 ```
 
@@ -136,7 +136,13 @@ chicago (most expensive for pleb)
 Cincinnati/Dayton (cheapest overall/ for org)
 pheonix/tucson (cheapest for pleb)
 sacramento (where we are to compare)
-make 1 graph for each location with a density line for org and pleb
+```{r}
+font_import()
+loadfonts(device = "win")
+```
+```{r}
+grDevices::colors()
+```
 
 ```{r}
 avo$year <- as.factor(avo$year)
@@ -160,13 +166,6 @@ sf_data %>%
   stat_smooth(method= lm, se= F)
 ```
 
-
-
-```{r}
-fit <- lm(`date` ~ average_price, `data` = sf_data)
-ggplotRegression(fit)
-```
-
 ```{r}
 options(scipen= 999)
 ```
@@ -185,189 +184,117 @@ ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) 
 ggplotRegression(lm(average_price ~ time_dif, data = sf_data))
 
 ```
+
+#final sf graph
 ```{r}
 sf_data %>% 
 ggplot(aes(x= date, y= average_price))+
-geom_point()+
-geom_smooth(method= lm, se= F)+
-labs(title = paste("Intercept =1.7728",
-                     "Slope = -0.000011943"))
-
-
+geom_point(color= "palegreen4")+
+geom_smooth(method= lm, se= F, color= "burlywood4")+
+labs(title = "Sf Price Per Avo; Intercept =1.7728, Slope = -0.000011943", 
+     x= "Date",
+     y= "Average Price")+
+  theme(text=element_text(size=13, family="Comic Sans MS"),
+            axis.text.x = element_text(angle = 60, hjust=1))
 ```
-
-
-
-
-```{r}
-sf_data %>% 
-  ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method= lm, se= F)
-```
-
-
-
-```{r}
-sf_data %>% 
-res=lm(average_price ~ date)
-```
-
-```{r}
-options(scipen = 9)
-cse = function(reg) {
-  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
-  return(rob)
-}
-sfreg <- lm(average_price ~ date, data=sf_data)
-stargazer(sfreg,
-          se=list(cse(sfreg)),
-          title="Regression Results", type="text",
-          df=FALSE, digits=3)
-```
-
-```{r}
-lm(average_price ~ date, data= sf_data)
-```
-
-
-
-
-```{r}
-sf_data$average_price <- as.character(sf_data$average_price)
-sf_data
-```
-
-```{r}
-sf_data$date <- as.factor(sf_data$date)
-sf_data
-```
-
-```{r}
-?lm
-```
-
 
 ```{r}
 chic_data <- avo %>% 
-  filter(geography == "Chicago")
+  filter(geography == "Chicago") %>% 
+  mutate(time_dif = as.double(difftime(date, lubridate::ymd("2015-01-04")), units= "days"))
+chic_data
+```
+```{r}
+ggplotRegression(lm(average_price ~ time_dif, data = chic_data))
+
 ```
 
+#final chocago graph
 ```{r}
 chic_data %>% 
   ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method= lm, se= F)
-```
-
-```{r}
-options(scipen = 9)
-cse = function(reg) {
-  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
-  return(rob)
-}
-chicreg <- lm(average_price ~ date, data=chic_data)
-stargazer(chicreg,
-          se=list(cse(chicreg)),
-          title="Regression Results", type="text",
-          df=FALSE, digits=3)
+ geom_point(color= "palegreen4")+
+geom_smooth(method= lm, se= F, color= "burlywood4")+
+  labs(title = "Chicago Price Per Avo; Intercept = 1.5219, Slope = 0.000002", 
+     x= "Date",
+     y= "Average Price")+
+  theme(text=element_text(size=11, family="Comic Sans MS"),
+            axis.text.x = element_text(angle = 60, hjust=1))
 ```
 
 ```{r}
 cinday_data <- avo %>% 
-  filter(geography == "Cincinnati/Dayton")
+  filter(geography == "Cincinnati/Dayton") %>% 
+  mutate(time_dif = as.double(difftime(date, lubridate::ymd("2015-01-04")), units= "days"))
+cinday_data
 ```
 
+```{r}
+ggplotRegression(lm(average_price ~ time_dif, data = cinday_data))
+```
+
+#final cincinnati/dayton graph
 ```{r}
 cinday_data %>%  
   ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method= lm, se= F)
-```
-```{r}
-options(scipen = 9)
-cse = function(reg) {
-  rob = sqrt(diag(vcovHC(reg, type = "HC1")))
-  return(rob)
-}
-reg1 <- lm(average_price ~ date, data=cinday_data)
-stargazer(reg1,
-          se=list(cse(reg1)),
-          title="Regression Results", type="text",
-          df=FALSE, digits=3)
-```
-##literally how do you find the slope of line of best fit
-```{r}
-avo %>% 
-  filter(geography == "Cincinnati/Dayton") %>% 
-  ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method= lm, se= F)
+   geom_point(color= "palegreen4")+
+geom_smooth(method= lm, se= F, color= "burlywood4")+
+  labs(title = "Cincinnati/Dayton Price Per Avo; Intercept = 1.1692, Slope = 0.000064", 
+     x= "Date",
+     y= "Average Price")+
+  theme(text=element_text(size=11, family="Comic Sans MS"),
+            axis.text.x = element_text(angle = 60, hjust=1))
 ```
 
 ```{r}
-avo %>% 
+photuc_data <- avo %>% 
   filter(geography == "Phoenix/Tucson") %>% 
+  mutate(time_dif = as.double(difftime(date, lubridate::ymd("2015-01-04")), units= "days"))
+photuc_data
+```
+
+```{r}
+ggplotRegression(lm(average_price ~ time_dif, data = photuc_data))
+```
+
+#final phoenix/tucson graph
+```{r}
+photuc_data %>%  
   ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method=lm, se=F)
+ geom_point(color= "palegreen4")+
+geom_smooth(method= lm, se= F, color= "burlywood4")+
+  labs(title = "Phoenix/Tucson Price Per Avo; Intercept = 1.2015, Slope = 0.000007", 
+     x= "Date",
+     y= "Average Price")+
+  theme(text=element_text(size=11, family="Comic Sans MS"),
+            axis.text.x = element_text(angle = 60, hjust=1))
 ```
 
+```{r}
+sac_data <- avo %>% 
+  filter(geography == "Sacramento") %>% 
+  mutate(time_dif = as.double(difftime(date, lubridate::ymd("2015-01-04")), units= "days"))
+sac_data
+```
 
 ```{r}
-avo %>% 
-  filter(geography == "Sacramento") %>% 
+ggplotRegression(lm(average_price ~ time_dif, data = sac_data))
+```
+
+#final sac graph
+```{r}
+ sac_data%>% 
   ggplot(aes(x= date, y= average_price))+
-  geom_point()+
-  geom_smooth(method=lm, se=F)
+  geom_point(color= "palegreen4")+
+geom_smooth(method= lm, se= F, color= "burlywood4")+
+  labs(title = "Sacramento Price Per Avo; Intercept = 1.5901, Slope = -0.000005", 
+     x= "Date",
+     y= "Average Price")+
+  theme(text=element_text(size=11, family="Comic Sans MS"),
+            axis.text.x = element_text(angle = 60, hjust=1))
 ```
 
-
-```{r}
-p <- avo %>% 
-  filter(geography == "San Francisco") %>% 
-  group_by(year) %>% 
-  mutate(average_price_mean = as.numeric(mean(average_price, na.rm=T))) %>% 
-  ggplot(aes(x= year, y= average_price_mean, fill=year))+
-  geom_point()+
-  geom_smooth(method=lm, se=F)
-p
-```
-
-```{r}
-avo %>% 
-  filter(geography == "San Francisco") %>% 
-  ggplot(aes(x= year, y= average_price, fill=year))+
-  geom_boxplot()
-```
-
-```{r}
-avo %>% 
-  filter(geography == "Chicago") %>% 
-  ggplot(aes(x= year, y= average_price, fill=year))+
-  geom_boxplot()
-```
-```{r}
-avo %>% 
-  filter(geography == "Cincinnati/Dayton") %>% 
-  ggplot(aes(x= year, y= average_price, fill=year))+
-  geom_boxplot()
-```
-```{r}
-avo %>% 
-  filter(geography == "Phoenix/Tucson") %>% 
-  ggplot(aes(x= year, y= average_price, fill=year))+
-  geom_boxplot()
-```
-
-```{r}
-avo %>% 
-  filter(geography == "Sacramento") %>% 
-  ggplot(aes(x= year, y= average_price, fill=year))+
-  geom_boxplot()
-```
-
-##Lets do something new because I can't find the slope: app
+##Slides Plan
 
 
 
