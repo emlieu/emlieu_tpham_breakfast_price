@@ -191,7 +191,7 @@ sf_data %>%
 ggplot(aes(x= date, y= average_price))+
 geom_point(color= "palegreen4")+
 geom_smooth(method= lm, se= F, color= "burlywood4")+
-labs(title = "Sf Price Per Avo; Intercept =1.7728, Slope = -0.000011943", 
+labs(title = "Sf Price Per Avo; Intercept =1.7728, Slope = -0.000012", 
      x= "Date",
      y= "Average Price")+
   theme(text=element_text(size=13, family="Comic Sans MS"),
