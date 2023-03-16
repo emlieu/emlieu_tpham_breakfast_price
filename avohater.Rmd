@@ -294,7 +294,9 @@ geom_smooth(method= lm, se= F, color= "burlywood4")+
             axis.text.x = element_text(angle = 60, hjust=1))
 ```
 
-##Slides Plan
+##Dividing the work
+tim: Coded the bar graphs about price extremities and worked on slides.
+emily: general planning and defining questions, finding the answer to the questions via making scatter plots, the slides
 
 
 
